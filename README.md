@@ -11,6 +11,6 @@
 
 &nbsp;&nbsp;&nbsp;R&nbsp;&nbsp;&nbsp;： 清除綠色的提示。
 
-&nbsp;&nbsp;Enter ： 直接進行求解。
+ Enter ： 直接進行求解。
 
 Esc 離開，
