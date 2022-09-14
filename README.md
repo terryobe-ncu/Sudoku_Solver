@@ -1,6 +1,8 @@
 # Sudoku_Solver
 填寫數獨問題，並自動產生一個解。
 
+![image](https://user-images.githubusercontent.com/113522238/190148917-11681132-8e7a-40ed-80b6-f7f5960073c7.png)
+
 操作方式：
 
  A 和 D ： 控制填入的數字，以滑鼠點擊填入，填入數字0代表清除。
