@@ -5,12 +5,14 @@
 
 操作方式：
 
- A 和 D ： 控制填入的數字，以滑鼠點擊填入，填入數字0代表清除。
+A 和 D ： 控制填入的數字，以滑鼠點擊填入，填入數字0代表清除。
 
-&nbsp;&nbsp;&nbsp;U&nbsp;&nbsp;&nbsp;： 會用基本規則過濾可填入的答案，若只剩一種可能，則會自動填入並重複操作。
+&nbsp;&nbsp;&nbsp;&nbsp;U&nbsp;&nbsp;&nbsp;： 會用基本規則過濾可填入的答案，若只剩一種可能，則會自動填入並重複操作。
 
-&nbsp;&nbsp;&nbsp;R&nbsp;&nbsp;&nbsp;： 清除綠色的提示。
+&nbsp;&nbsp;&nbsp;&nbsp;R&nbsp;&nbsp;&nbsp;： 清除綠色的提示。
 
  Enter ： 直接進行求解。
 
-Esc 離開，
+&nbsp;&nbsp;Esc&nbsp;  ： 離開
+
+數字 123 ： 載入預設題目
