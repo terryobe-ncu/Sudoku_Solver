@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Sun Oct 23 20:52:18 2022
-
-@author: user
+@author: G8
 """
 
 import pygame
@@ -52,7 +51,7 @@ Number_x = Line_1
 Number_y = Line_2 - Space // 2
 Text_Size = 30
 Set_Size = 15
-
+isDifficultCase = False
 
 ### Mouse Detect
 def Mouse_Detect():
@@ -392,6 +391,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             select = True
         if event.type == pygame.KEYDOWN:
+            
             if event.key == pygame.K_ESCAPE:
                 pygame.quit()
                 exit()
@@ -408,32 +408,54 @@ while True:
                     Board[pos[1]][pos[0]] = 0
                 new.clear()
                 Update1()
-            elif event.key == pygame.K_KP1:  # 最難數獨題
+            elif event.key == pygame.K_KP1:
+                new.clear()
                 Board = [[8, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 3, 6, 0, 0, 0, 0, 0],
                          [0, 7, 0, 0, 9, 0, 2, 0, 0], [0, 5, 0, 0, 0, 7, 0, 0, 0],
                          [0, 0, 0, 0, 4, 5, 7, 0, 0], [0, 0, 0, 1, 0, 0, 0, 3, 0],
                          [0, 0, 1, 0, 0, 0, 0, 6, 8], [0, 0, 8, 5, 0, 0, 0, 1, 0],
                          [0, 9, 0, 0, 0, 0, 4, 0, 0]]
-            elif event.key == pygame.K_KP2:  # 填滿的最難數獨題
+                isDifficultCase = True
+            elif event.key == pygame.K_KP2:
+                new.clear()
                 Board = [[8, 1, 2, 7, 5, 3, 6, 4, 9], [9, 4, 3, 6, 8, 2, 1, 7, 5],
                          [6, 7, 5, 4, 9, 1, 2, 8, 3], [1, 5, 4, 2, 3, 7, 8, 9, 6],
                          [3, 6, 9, 8, 4, 5, 7, 2, 1], [2, 8, 7, 1, 6, 9, 5, 3, 4],
                          [5, 2, 1, 9, 7, 4, 3, 6, 8], [4, 3, 8, 5, 2, 6, 9, 1, 7],
                          [7, 9, 6, 3, 1, 8, 4, 5, 2]]
-            elif event.key == pygame.K_KP3:  # 有一格無法填
+                isDifficultCase = False
+            elif event.key == pygame.K_KP3:
+                new.clear()
                 Board = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
                          [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 2, 3, 0, 0, 0],
                          [0, 0, 0, 4, 5, 6, 0, 0, 0], [0, 0, 0, 7, 8, 0, 0, 0, 0],
                          [0, 0, 0, 0, 0, 9, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
                          [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+                isDifficultCase = False
             elif event.key == pygame.K_KP4:  # 一般數獨題，按U會出來一個數字
+                new.clear()
                 Board = [[6, 0, 0, 0, 0, 0, 4, 0, 5], [0, 0, 8, 2, 0, 0, 0, 0, 0],
-                         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 6, 0, 1, 0],
-                         [4, 0, 7, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 2, 0],
-                         [0, 0, 6, 0, 0, 0, 7, 8, 0], [0, 0, 0, 0, 5, 4, 0, 0, 0],
-                         [0, 0, 0, 9, 0, 0, 0, 0, 0]]
-
-            elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
+                        [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 6, 0, 1, 0],
+                        [4, 0, 7, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 2, 0],
+                        [0, 0, 6, 0, 0, 0, 7, 8, 0], [0, 0, 0, 0, 5, 4, 0, 0, 0],
+                        [0, 0, 0, 9, 0, 0, 0, 0, 0]]
+                isDifficultCase = False
+            
+            elif (event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER) and isDifficultCase == True:
+                new.clear()
+                Update3()
+                if not isFinish():
+                    Depth = 0
+                    time1 = time()
+                    print("Brute Force : 0")
+                    while not Brute_Force(Depth):
+                        Depth += 1
+                        print("time :", time() - time1)
+                        print("Brute Force :", Depth)
+                        time1 = time()
+                    print("time :", time() - time1)
+            elif (event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER) and isDifficultCase == False:
+                isDifficultCase=0
                 tk.Tk().withdraw()
                 if not checkQuestion():  # 矛盾
                     messagebox.showerror("ERROR",
