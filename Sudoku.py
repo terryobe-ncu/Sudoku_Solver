@@ -1,22 +1,11 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Oct 28 20:00:00 2022
-
-@author: user
-"""
-
 import pygame
 from time import time
-from tkinter import messagebox
-import tkinter as tk
 
 pygame.init()
 pygame.display.set_caption("Test")
 screen = pygame.display.set_mode((750, 700))
-# pygame.key.set_repeat(300, 1)
+pygame.key.set_repeat(300, 1)
 
-Branch_Limit = 5
-Branch = 0
 ### Screen Setting
 
 Bg_Color = (150, 150, 150)
@@ -91,40 +80,6 @@ def Draw_Rec(pos, color, size=1):
 # Set
 Sets = [[set(range(1, 10)) for x in range(9)] for y in range(9)]
 new = set()
-
-
-def checkQuestion():
-    # row
-    for L in Board:
-        count = [0] * 9
-        for nbr in L:
-            if nbr:
-                count[nbr - 1] += 1
-        for c in count:
-            if c > 1:
-                return False
-    # column
-    for x in range(9):
-        count = [0] * 9
-        for y in range(9):
-            if Board[y][x]:
-                count[Board[y][x] - 1] += 1
-            for c in count:
-                if c > 1:
-                    return False
-    # block
-    for Y in range(3):
-        for X in range(3):
-            count = [0] * 9
-            for y in range(3):
-                for x in range(3):
-                    if Board[Y * 3 + y][X * 3 + x]:
-                        count[Board[Y * 3 + y][X * 3 + x] - 1] += 1
-            for c in count:
-                if c > 1:
-                    return False
-
-    return True
 
 
 def isFinish():
@@ -316,20 +271,15 @@ def Update3():
                 # Back
                 Board = [L.copy() for L in Board_c]
                 new = new_c.copy()
-
     return isLegal()
 
 
 def Brute_Force(depth):
-    global Board, Sets, new, Branch
-    Branch += 1
+    global Board, Sets, new
     Update1()
     for y in range(9):
         for x in range(9):
             for e in Sets[y][x].copy():
-                if Branch > Branch_Limit:
-                    return True
-
                 # Back up
                 Board_c = [L.copy() for L in Board]
                 new_c = new.copy()
@@ -358,21 +308,6 @@ def Brute_Force(depth):
     return isFinish()
 
 
-def same_row(i, j): return (i // 9 == j // 9)
-
-
-def same_col(i, j): return (i - j) % 9 == 0
-
-
-def same_block(i, j): return (i // 27 == j // 27 and i % 9 // 3 == j % 9 // 3)
-
-
-def clear_new():
-    for pos in new:
-        Board[pos[1]][pos[0]] = 0
-    new.clear()
-
-
 while True:
     pygame.time.delay(50)
 
@@ -391,67 +326,31 @@ while True:
                 number -= 1
             elif event.key == pygame.K_d:
                 number += 1
+
             elif event.key == pygame.K_r:
-                clear_new()
+                for pos in new:
+                    Board[pos[1]][pos[0]] = 0
+                new.clear()
+
             elif event.key == pygame.K_u:
                 for pos in new:
                     Board[pos[1]][pos[0]] = 0
                 new.clear()
                 Update1()
-            elif event.key == pygame.K_KP1:  # 最難數獨題
-                Board = [[8, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 3, 6, 0, 0, 0, 0, 0],
-                         [0, 7, 0, 0, 9, 0, 2, 0, 0], [0, 5, 0, 0, 0, 7, 0, 0, 0],
-                         [0, 0, 0, 0, 4, 5, 7, 0, 0], [0, 0, 0, 1, 0, 0, 0, 3, 0],
-                         [0, 0, 1, 0, 0, 0, 0, 6, 8], [0, 0, 8, 5, 0, 0, 0, 1, 0],
-                         [0, 9, 0, 0, 0, 0, 4, 0, 0]]
-                new.clear()
-            elif event.key == pygame.K_KP2:  # 填滿的最難數獨題
-                Board = [[8, 1, 2, 7, 5, 3, 6, 4, 9], [9, 4, 3, 6, 8, 2, 1, 7, 5],
-                         [6, 7, 5, 4, 9, 1, 2, 8, 3], [1, 5, 4, 2, 3, 7, 8, 9, 6],
-                         [3, 6, 9, 8, 4, 5, 7, 2, 1], [2, 8, 7, 1, 6, 9, 5, 3, 4],
-                         [5, 2, 1, 9, 7, 4, 3, 6, 8], [4, 3, 8, 5, 2, 6, 9, 1, 7],
-                         [7, 9, 6, 3, 1, 8, 4, 5, 2]]
-                new.clear()
-            elif event.key == pygame.K_KP3:  # 有一格無法填
-                Board = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 2, 3, 0, 0, 0],
-                         [0, 0, 0, 4, 5, 6, 0, 0, 0], [0, 0, 0, 7, 8, 0, 0, 0, 0],
-                         [0, 0, 0, 0, 0, 9, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-                         [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-                new.clear()
-            elif event.key == pygame.K_KP4:  # 一般數獨題，按U會出來一個數字
-                Board = [[6, 0, 0, 0, 0, 0, 4, 0, 5], [0, 0, 8, 2, 0, 0, 0, 0, 0],
-                         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 6, 0, 1, 0],
-                         [4, 0, 7, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, 0, 0, 0, 2, 0],
-                         [0, 0, 6, 0, 0, 0, 7, 8, 0], [0, 0, 0, 0, 5, 4, 0, 0, 0],
-                         [0, 0, 0, 9, 0, 0, 0, 0, 0]]
-                new.clear()
 
             elif event.key == pygame.K_RETURN or event.key == pygame.K_KP_ENTER:
-                tk.Tk().withdraw()
-                if not checkQuestion():  # 矛盾
-                    messagebox.showerror("ERROR",
-                                         "There are contradictions in this question!")
-                else:
-                    new.clear()
-                    Update3()
-                    if not isFinish():
-                        Depth = Branch = 0
+                new.clear()
+                Update3()
+                if not isFinish():
+                    Depth = 0
+                    time1 = time()
+                    print("Brute Force : 0")
+                    while not Brute_Force(Depth):
+                        Depth += 1
+                        print("time :", time() - time1)
+                        print("Brute Force :", Depth)
                         time1 = time()
-                        print("Brute Force : 0")
-                        while not Brute_Force(Depth):
-                            Depth += 1
-                            print("time :", time() - time1)
-                            print("Brute Force :", Depth)
-                            time1 = time()
-
-                        if isFinish():
-                            print("time :", time() - time1)
-                        else:
-                            clear_new()
-                            messagebox.showwarning("Warning",
-                                                   "The table is invalid!")
-                        print("Branch:", Branch)
+                    print("time :", time() - time1)
 
     # -------------------------------------- Screen
 
@@ -484,8 +383,7 @@ while True:
         # Show Set
         if not Board[detect[1]][detect[0]]:
             for e in Sets[detect[1]][detect[0]]:
-                ShowText(str(e), (Line_2 + ((e - 1) % 3 - 1) * Space // 2,
-                                  Line_2 + ((e - 1) // 3 - 5) * Space // 2),
+                ShowText(str(e), (Line_2 + ((e - 1) % 3 - 1) * Space // 2, Line_2 + ((e - 1) // 3 - 5) * Space // 2),
                          Text_Size, Blue)
 
     # Show Text
@@ -502,8 +400,7 @@ while True:
             v = Board[y][x]
             if v:
                 if (x, y) in new:
-                    ShowText(str(v), ((x + 1.2) * Space, (y + 1) * Space), Text_Size,
-                             Green)
+                    ShowText(str(v), ((x + 1.2) * Space, (y + 1) * Space), Text_Size, Green)
                 else:
                     ShowText(str(v), ((x + 1.2) * Space, (y + 1) * Space), Text_Size)
 
